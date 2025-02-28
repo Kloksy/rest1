@@ -1,8 +1,15 @@
+
 <x-laravel-ui-adminlte::adminlte-layout>
-
-
 @livewireStyles
-@stack('page_css')
+
+@fluxAppearance
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+
+<!-- jQuery должен быть подключен до Select2 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -69,7 +76,18 @@
             </footer>
         </div>
         
-        @stack('third_party_scripts')
         @livewireScripts
+
+        @fluxScripts
+        
+        <script>
+            $(document).ready(function() {
+                $('.select2').select2({
+                    theme: 'bootstrap4',
+                    width: '100%'
+                });
+            });
+        </script>
+
     </body>
 </x-laravel-ui-adminlte::adminlte-layout>

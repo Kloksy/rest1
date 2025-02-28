@@ -66,3 +66,4 @@ Route::resource('userPreferredTypes', App\Http\Controllers\UserPreferredTypeCont
 Route::resource('user-interactions', App\Http\Controllers\UserInteractionController::class);
 Route::resource('userInteractions', App\Http\Controllers\UserInteractionController::class);
 Route::resource('roles', App\Http\Controllers\RoleController::class);
+

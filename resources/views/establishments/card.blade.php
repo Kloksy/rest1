@@ -14,7 +14,7 @@
         <div class="card-header bg-primary text-white">Основная информация</div>
         <div class="card-body">
             <p><strong>Тип:</strong> {{ $establishment->type->name ?? 'Не указано' }}</p>
-            <p><strong>Рейтинг:</strong> {{ $establishment->rating ?? 'Нет данных' }}/5</p>
+            <p><strong>Рейтинг на Yandex:</strong> {{ $establishment->rating ?? 'Нет данных' }}/5</p>
             <p><strong>Адрес:</strong> {{ $establishment->address }}</p>
             <p><strong>Ценовая категория:</strong> {{ $establishment->price_category ?? 'Не указана' }}</p>
             <p><strong>Средний чек:</strong> {{ $establishment->average_bill ?? 'Не указан' }}</p>
