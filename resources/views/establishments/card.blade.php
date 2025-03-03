@@ -119,7 +119,7 @@
                                     <p><strong>Автор:</strong> {{ $review->user_name }}</p>
                                     <p><strong>Рейтинг:</strong> {{ $review->rating }}/5</p>
                                     <p><strong>Дата:</strong> {{ \Carbon\Carbon::parse($review->created_at)->format('d.m.Y') }}</p>
-                                    <p>{{ $review->review_text }}</p>
+                                    <p>{{ $review->content }}</p>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
                                     <p><strong>Автор:</strong> {{ $review->user->name }}</p>
                                     <p><strong>Рейтинг:</strong> {{ $review->rating }}/5</p>
                                     <p><strong>Дата:</strong> {{ \Carbon\Carbon::parse($review->created_at)->format('d.m.Y') }}</p>
-                                    <p>{{ $review->review_text }}</p>
+                                    <p>{{ $review->content }}</p>
                                 </div>
                             </div>
                         </div>
