@@ -47,6 +47,32 @@ class Establishment extends Model
         'updated_at' => 'nullable'
     ];
 
+    // В модели Establishment
+    public function getMinPriceAttribute()
+    {
+        preg_match('/\d+/', explode('–', $this->average_bill)[0], $matches);
+        return (int)($matches[0] ?? 0);
+    }
+
+    public function getMaxPriceAttribute()
+    {
+        $parts = explode('–', $this->average_bill);
+        if (count($parts) < 2) return 0;
+        preg_match('/\d+/', $parts[1], $matches);
+        return (int)($matches[0] ?? 0);
+    }
+
+    public function getPriceRangeAttribute()
+    {
+        if (!$this->average_bill) return [null, null];
+        
+        $parts = explode('–', $this->average_bill);
+        $min = (int)preg_replace('/\D/', '', $parts[0]);
+        $max = isset($parts[1]) ? (int)preg_replace('/\D/', '', $parts[1]) : $min;
+        
+        return [$min, $max];
+    }
+
     public function type(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\EstablishmentType::class, 'type_id');

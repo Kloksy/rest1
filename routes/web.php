@@ -20,8 +20,6 @@ Route::get('/', function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/search', [EstablishmentController::class, 'search'])->name('search');
-
 Route::get('/establishment/{id}', [EstablishmentController::class, 'card'])->name('establishment.card');
 
 

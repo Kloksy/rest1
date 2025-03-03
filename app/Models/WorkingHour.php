@@ -27,6 +27,25 @@ class WorkingHour extends Model
         'updated_at' => 'nullable'
     ];
 
+    public function getOpenTimeAttribute()
+    {
+        return $this->parseTime(split_part($this->hours, '-', 1));
+    }
+
+    public function getCloseTimeAttribute()
+    {
+        return $this->parseTime(split_part($this->hours, '-', 2));
+    }
+
+    private function parseTime($timeStr)
+    {
+        try {
+            return Carbon::createFromFormat('H:i', trim($timeStr));
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     public function establishment(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\Establishment::class, 'establishment_id');

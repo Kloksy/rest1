@@ -1,8 +1,27 @@
-
 <x-laravel-ui-adminlte::adminlte-layout>
 @livewireStyles
 
-@fluxAppearance
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+
+<script>
+  tailwind.config = {
+    prefix: 'tw-',
+    corePlugins: {
+      preflight: false,
+    },
+    important: true
+  }
+</script>
+
+
+<link rel="preconnect" href="https://fonts.bunny.net">
+<link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" rel="stylesheet" />
@@ -66,28 +85,12 @@
                 @yield('content')
             </div>
 
-            <!-- Main Footer -->
-            <footer class="main-footer">
-                <div class="float-right d-none d-sm-block">
-                    <b>Version</b> 3.1.0
-                </div>
-                <strong>Copyright &copy; 2014-2023 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
-                reserved.
-            </footer>
         </div>
         
         @livewireScripts
+        @stack('js')
 
         @fluxScripts
         
-        <script>
-            $(document).ready(function() {
-                $('.select2').select2({
-                    theme: 'bootstrap4',
-                    width: '100%'
-                });
-            });
-        </script>
-
     </body>
 </x-laravel-ui-adminlte::adminlte-layout>
