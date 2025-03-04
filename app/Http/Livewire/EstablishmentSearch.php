@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Establishment;
+use App\Repositories\EstablishmentRepository;
+use App\Services\DateTimeService;
 use App\Models\Cuisine;
 use App\Models\GeneralInfo;
 use App\Models\EstablishmentType;
@@ -49,63 +51,43 @@ class EstablishmentSearch extends Component
     public $userTimezone = null;
     public $userLocalTime;
 
-    protected $listeners = ['timezoneUpdate'];
-
     public function render()
     {
-        $currentTime = $this->getUserTime();
-        // Фильтрация заведений на основе введенных данных
-        $establishments = Establishment::query()
-            ->when($this->name, fn($q) => $q->where('name', 'like', "%{$this->name}%"))
-            ->when($this->type_id, fn($q) => $q->where('type_id', $this->type_id))
-            ->when($this->cuisine_ids, fn($q) => $q->whereHas('cuisines', 
-                fn($q) => $q->whereIn('id', $this->cuisine_ids)))
-            ->when($this->price_category, fn($q) => $q->where('price_category', $this->price_category))
-            ->when($this->general_info_ids, fn($q) => $q->whereHas('generalInfos', 
-                fn($q) => $q->whereIn('id', $this->general_info_ids)))
-            ->when($this->open_now, function($query) use ($currentTime) {
-                $this->applyOpenNowFilter($query, $currentTime);
-            })
-            ->whereBetween('rating', [$this->min_rating, $this->max_rating])
-            ->when($this->min_price || $this->max_price, function($query) {
-                $query->where(function($query) {
-                    $query->whereRaw("
-                        (
-                            COALESCE(
-                                (regexp_match(split_part(average_bill, '–', 1), '\d+'))[1]::integer, 
-                                0
-                            ) >= ?
-                            AND 
-                            COALESCE(
-                                (regexp_match(split_part(average_bill, '–', 2), '\d+'))[1]::integer, 
-                                100000
-                            ) <= ?
-                        )".($this->include_no_price ? " OR average_bill IS NULL" : "")."
-                    ", [$this->min_price, $this->max_price]);
-                });
-            })
-            ->orderBy($this->sort_type, $this->sort_direction)
-            ->with(['cuisines', 'generalInfos', 'workingHours'])
-            ->paginate(9);
-
-        // Подгружаем данные для фильтров
-        $types = EstablishmentType::all();
-        $cuisines = Cuisine::all();
-        $generalInfos = GeneralInfo::all();
-
+        $filters = $this->prepareFilters();
+        
         return view('livewire.establishment-search', [
-            'establishments' => $establishments,
-            'types' => $types,
-            'cuisines' => $cuisines,
-            'generalInfos' => $generalInfos,
-            'priceBounds' => $this->getPriceBounds(),
+            'establishments' => app(EstablishmentRepository::class)->getFilteredEstablishments($filters),
+            'types' => EstablishmentType::all(),
+            'cuisines' => Cuisine::all(),
+            'generalInfos' => GeneralInfo::all(),
+            'priceBounds' => Establishment::getPriceBounds(),
         ]);
+    }
+
+    private function prepareFilters(): array
+    {
+        return [
+            'name' => $this->name,
+            'type_id' => $this->type_id,
+            'cuisine_ids' => $this->cuisine_ids,
+            'price_category' => $this->price_category,
+            'general_info_ids' => $this->general_info_ids,
+            'current_time' => DateTimeService::getUserTime($this->userTimezone),
+            'open_now' => $this->open_now,
+            'min_rating' => $this->min_rating,
+            'max_rating' => $this->max_rating,
+            'min_price' => $this->min_price,
+            'max_price' => $this->max_price,
+            'include_no_price' => $this->include_no_price,
+            'sort_type' => $this->sort_type,
+            'sort_direction' => $this->sort_direction,
+        ];
     }
 
     public function updated($property)
     {
         if (in_array($property, ['min_rating', 'max_rating'])) {
-            $this->validateRatingInputs();
+            DateTimeService::validateRatingInputs($this->min_rating, $this->max_rating);
             $this->applyFilters();
         }
     }

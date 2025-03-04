@@ -70,7 +70,7 @@ class EstablishmentController extends AppBaseController
     {
         // Используем метод репозитория для поиска заведения
         $establishment = $this->establishmentRepository->findWithRelations($id, ['photos']);
-
+        
         // Проверяем, существует ли заведение
         if (empty($establishment)) {
             Flash::error('Заведение не найдено');

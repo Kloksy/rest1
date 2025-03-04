@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Establishment;
 use App\Models\User;
+use App\Models\UserInteraction;
 use App\Models\UserPreference;
 use App\Models\EstablishmentType;
 use App\Models\Cuisine;

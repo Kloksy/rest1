@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class WorkingHour extends Model
 {
@@ -27,15 +28,15 @@ class WorkingHour extends Model
         'updated_at' => 'nullable'
     ];
 
-    public function getOpenTimeAttribute()
-    {
-        return $this->parseTime(split_part($this->hours, '-', 1));
-    }
+    // public function getOpenTimeAttribute()
+    // {
+    //     return $this->parseTime(split_part($this->hours, '-', 1));
+    // }
 
-    public function getCloseTimeAttribute()
-    {
-        return $this->parseTime(split_part($this->hours, '-', 2));
-    }
+    // public function getCloseTimeAttribute()
+    // {
+    //     return $this->parseTime(split_part($this->hours, '-', 2));
+    // }
 
     private function parseTime($timeStr)
     {

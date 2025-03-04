@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Establishment extends Model
 {
@@ -71,6 +72,115 @@ class Establishment extends Model
         $max = isset($parts[1]) ? (int)preg_replace('/\D/', '', $parts[1]) : $min;
         
         return [$min, $max];
+    }
+
+    public function scopeSearchByName($query, $name)
+    {
+        return $query->when($name, fn($q) => $q->where('name', 'like', "%{$name}%"));
+    }
+
+    public function scopeFilterByType($query, $typeId)
+    {
+        return $query->when($typeId, fn($q) => $q->where('type_id', $typeId));
+    }
+
+    public function scopeFilterByCuisines($query, array $cuisineIds)
+    {
+        return $query->when($cuisineIds, fn($q) => $q->whereHas('cuisines', 
+            fn($q) => $q->whereIn('id', $cuisineIds)));
+    }
+
+    public function scopeFilterByServices($query, array $generalInfoIds)
+    {
+        return $query->when($generalInfoIds, fn($q) => $q->whereHas('generalInfos', 
+            fn($q) => $q->whereIn('id', $generalInfoIds)));
+    }
+
+    public function scopeFilterByPriceCategory($query, $priceCategory)
+    {
+        return $query->when($priceCategory, fn($q) => $q->where('price_category', $priceCategory));
+    }
+
+    public function scopeFilterByRatingRange($query, $minRating, $maxRating)
+    {
+        return $query->whereBetween('rating', [$minRating, $maxRating]); 
+    }
+
+    public function scopeFilterByPriceRange($query, $minPrice, $maxPrice, $includeNoPrice)
+    {
+        return $query->when($minPrice || $maxPrice, function($query, $minPrice, $maxPrice, $includeNoPrice) {
+            $query->where(function($query, $minPrice, $maxPrice, $includeNoPrice) {
+                $query->whereRaw("
+                    (
+                        COALESCE(
+                            (regexp_match(split_part(average_bill, '–', 1), '\d+'))[1]::integer, 
+                            0
+                        ) >= ?
+                        AND 
+                        COALESCE(
+                            (regexp_match(split_part(average_bill, '–', 2), '\d+'))[1]::integer, 
+                            100000
+                        ) <= ?
+                    )".($includeNoPrice ? " OR average_bill IS NULL" : "")."
+                ", [$minPrice, $maxPrice]);
+            });
+        }); 
+    }
+
+    public function scopeFilterOpenNow($query, Carbon $time, $openNow)
+    {
+        if($openNow)
+        {
+            $shortDay = self::mapDayToShort($time->format('D'));
+            
+            return $query->whereHas('workingHours', function($q) use ($shortDay, $time) {
+                $q->where('day', $shortDay)
+                ->whereRaw("(hours ~ '^\d{2}:\d{2}-\d{2}:\d{2}$'
+                    AND split_part(hours, '-', 1)::time <= ?::time
+                    AND split_part(hours, '-', 2)::time >= ?::time)",
+                    [$time->format('H:i:s'), $time->format('H:i:s')]
+                );
+            });
+        }
+    }
+
+    public static function getPriceBounds()
+    {
+        return self::query()
+            ->selectRaw("
+                COALESCE(MAX((regexp_match(split_part(average_bill, '–', 2), '\d+'))[1]::integer), 100000) as max_price,
+                COALESCE(MIN((regexp_match(split_part(average_bill, '–', 1), '\d+'))[1]::integer), 0) as min_price
+            ")
+            ->whereNotNull('average_bill')
+            ->first();
+    }
+
+    public static function mapDayToShort($englishDay)
+    {
+        return match ($englishDay) {
+            'Mon' => 'Mo',
+            'Tue' => 'Tu',
+            'Wed' => 'We',
+            'Thu' => 'Th',
+            'Fri' => 'Fr',
+            'Sat' => 'Sa',
+            'Sun' => 'Su',
+            default => 'Mo'
+        };
+    }
+
+    public function calculateUserRating()
+    {
+        // Вычисляем средний рейтинг из всех пользовательских отзывов
+        $averageRating = $this->userReviews()->avg('rating');
+
+        // Если нет отзывов, возвращаем null или 0
+        if (is_null($averageRating)) {
+            return 0; // Можно вернуть null, если хотите отображать "Нет данных"
+        }
+
+        // Округляем рейтинг до одного знака после запятой
+        return round($averageRating, 1);
     }
 
     public function type(): \Illuminate\Database\Eloquent\Relations\BelongsTo

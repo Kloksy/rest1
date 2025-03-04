@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use App\Http\Controllers\EstablishmentController;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +22,6 @@ Route::get('/', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/establishment/{id}', [EstablishmentController::class, 'card'])->name('establishment.card');
-
 
 Auth::routes();
 
@@ -63,5 +63,5 @@ Route::resource('userPreferredTypes', App\Http\Controllers\UserPreferredTypeCont
 
 Route::resource('user-interactions', App\Http\Controllers\UserInteractionController::class);
 Route::resource('userInteractions', App\Http\Controllers\UserInteractionController::class);
-Route::resource('roles', App\Http\Controllers\RoleController::class);
 
+Route::resource('roles', App\Http\Controllers\RoleController::class);

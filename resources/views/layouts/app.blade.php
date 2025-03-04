@@ -2,12 +2,16 @@
 @livewireStyles
 
 
+<script>
+    window.yandexMapsApiKey = @json(config('yandex-maps.api_key')); // Передаем ключ через Blade
+</script>
+<script src="https://api-maps.yandex.ru/v3/?apikey={{ config('yandex-maps.api_key') }}&lang={{ config('yandex-maps.lang') }}"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
 
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+<link href="{{ asset('css/app.css', 'js/yandexmaps.js') }}" rel="stylesheet">
 
 <script>
   tailwind.config = {

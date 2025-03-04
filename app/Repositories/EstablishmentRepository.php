@@ -50,4 +50,20 @@ class EstablishmentRepository extends BaseRepository
 
         return Establishment::with($relations)->find($id);
     }
+
+    public function getFilteredEstablishments(array $filters)
+    {
+        return Establishment::query()
+            ->searchByName($filters['name'])
+            ->filterByType($filters['type_id'])
+            ->filterByCuisines($filters['cuisine_ids'])
+            ->filterByPriceCategory($filters['price_category'])
+            ->filterByServices($filters['general_info_ids'])
+            ->filterOpenNow($filters['current_time'], $filters['open_now'])
+            ->filterByRatingRange($filters['min_rating'], $filters['max_rating'])
+            ->filterByPriceRange($filters['min_price'], $filters['max_price'], $filters['include_no_price'])
+            ->orderBy($filters['sort_type'], $filters['sort_direction'])
+            ->with(['cuisines', 'generalInfos', 'workingHours'])
+            ->paginate(9);
+    }
 }
