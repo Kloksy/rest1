@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use App\Http\Controllers\EstablishmentController;
-use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

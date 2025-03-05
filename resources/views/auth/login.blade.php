@@ -1,71 +1,108 @@
+@extends('layouts.app')
+
+@section('content')
 <x-laravel-ui-adminlte::adminlte-layout>
 
-    <body class="hold-transition login-page">
-        <div class="login-box">
-            <div class="login-logo">
-                <a href="{{ url('/home') }}"><b>{{ config('app.name') }}</b></a>
-            </div>
-            <!-- /.login-logo -->
-
-            <!-- /.login-box-body -->
-            <div class="card">
-                <div class="card-body login-card-body">
-                    <p class="login-box-msg">Sign in to start your session</p>
-
-                    <form method="post" action="{{ url('/login') }}">
-                        @csrf
-
-                        <div class="input-group mb-3">
-                            <input type="email" name="email" value="{{ old('email') }}" placeholder="Email"
-                                class="form-control @error('email') is-invalid @enderror">
-                            <div class="input-group-append">
-                                <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+    <div class="min-vh-100 d-flex align-items-center bg-gradient-primary">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card shadow-lg tw-rounded-2xl tw-border-0">
+                        <div class="card-body p-5">
+                            <!-- Логотип -->
+                            <div class="text-center mb-5">
+                                <h2 class="mt-3 tw-text-2xl tw-font-bold tw-text-gray-900">Добро пожаловать</h2>
+                                <p class="tw-text-gray-600">Войдите в свой аккаунт</p>
                             </div>
-                            @error('email')
-                                <span class="error invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
 
-                        <div class="input-group mb-3">
-                            <input type="password" name="password" placeholder="Password"
-                                class="form-control @error('password') is-invalid @enderror">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
+                            <form method="POST" action="{{ route('login') }}">
+                                @csrf
+                                
+                                <!-- Email -->
+                                <div class="mb-4">
+                                    <label class="form-label tw-text-gray-700">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-envelope tw-text-gray-400"></i>
+                                        </span>
+                                        <input 
+                                            type="email" 
+                                            name="email"
+                                            class="form-control tw-rounded-lg @error('email') is-invalid @enderror"
+                                            placeholder="example@domain.com"
+                                            value="{{ old('email') }}"
+                                            required
+                                            autofocus
+                                        >
+                                        @error('email')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
-                            @error('password')
-                                <span class="error invalid-feedback">{{ $message }}</span>
-                            @enderror
 
-                        </div>
-
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="icheck-primary">
-                                    <input type="checkbox" id="remember">
-                                    <label for="remember">Remember Me</label>
+                                <!-- Пароль -->
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <label class="form-label tw-text-gray-700">Пароль</label>
+                                        <a href="{{ route('password.request') }}" class="tw-text-sm tw-text-primary-600 hover:tw-text-primary-800">
+                                            Забыли пароль?
+                                        </a>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-lock tw-text-gray-400"></i>
+                                        </span>
+                                        <input 
+                                            type="password" 
+                                            name="password"
+                                            class="form-control tw-rounded-lg @error('password') is-invalid @enderror"
+                                            placeholder="••••••••"
+                                            required
+                                        >
+                                        @error('password')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                            </div>
+                                <!-- Запомнить меня -->
+                                <div class="mb-4">
+                                    <div class="form-check">
+                                        <input 
+                                            class="form-check-input" 
+                                            type="checkbox" 
+                                            name="remember" 
+                                            id="remember"
+                                            {{ old('remember') ? 'checked' : '' }}
+                                        >
+                                        <label class="form-check-label tw-text-gray-600" for="remember">
+                                            Запомнить меня
+                                        </label>
+                                    </div>
+                                </div>
 
+                                <!-- Кнопка входа -->
+                                <button type="submit" class="btn btn-primary w-100 tw-py-2.5 tw-rounded-lg tw-font-medium">
+                                    <i class="fas fa-sign-in-alt tw-mr-2"></i>Войти
+                                </button>
+
+                                <!-- Регистрация -->
+                                <div class="text-center mt-4">
+                                    <span class="tw-text-gray-600">Ещё нет аккаунта? </span>
+                                    <a href="{{ route('register') }}" class="tw-text-primary-600 hover:tw-text-primary-800">
+                                        Создать аккаунт
+                                    </a>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-
-                    <p class="mb-1">
-                        <a href="{{ route('password.request') }}">I forgot my password</a>
-                    </p>
-                    <p class="mb-0">
-                        <a href="{{ route('register') }}" class="text-center">Register a new membership</a>
-                    </p>
+                    </div>
                 </div>
-                <!-- /.login-card-body -->
             </div>
-
         </div>
-        <!-- /.login-box -->
-    </body>
+    </div>
 </x-laravel-ui-adminlte::adminlte-layout>
+@endsection

@@ -145,127 +145,85 @@
         <h2 class="tw-text-2xl tw-font-semibold tw-mb-6">
             <i class="fas fa-comments tw-text-purple-500 tw-mr-2"></i>Отзывы
         </h2>
-        
-        <ul class="tw-nav tw-nav-tabs tw-mb-4" id="reviewsTab" role="tablist">
-            <li class="tw-nav-item" role="presentation">
-                <button class="tw-nav-link active" data-bs-toggle="tab" data-bs-target="#yandex-reviews" type="button">
+    
+        <!-- Навигация табов -->
+        <ul class="nav nav-tabs tw-mb-4" id="reviewsTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" 
+                        id="yandex-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#yandex-reviews" 
+                        type="button" 
+                        role="tab" 
+                        aria-controls="yandex-reviews" 
+                        aria-selected="true">
                     Яндекс Отзывы ({{ $establishment->yandexReviews->count() }})
                 </button>
             </li>
-            <li class="tw-nav-item" role="presentation">
-                <button class="tw-nav-link" data-bs-toggle="tab" data-bs-target="#user-reviews" type="button">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" 
+                        id="users-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#user-reviews" 
+                        type="button" 
+                        role="tab" 
+                        aria-controls="user-reviews" 
+                        aria-selected="false">
                     Пользовательские отзывы ({{ $establishment->userReviews->count() }})
                 </button>
             </li>
         </ul>
+        
 
-        <div class="tw-tab-content" id="reviewsTabContent">
-            <!-- Яндекс Отзывы -->
-            <div class="tw-tab-pane fade show active" id="yandex-reviews">
-                @forelse($establishment->yandexReviews as $review)
-                <div class="tw-card tw-mb-3">
-                    <div class="tw-card-body">
-                        <div class="tw-flex tw-items-start tw-mb-3">
-                            <div class="tw-flex-1">
-                                <div class="tw-flex tw-items-center tw-mb-2">
-                                    <div class="tw-w-8 tw-h-8 tw-bg-blue-500 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-text-white tw-mr-3">
-                                        {{ strtoupper(substr($review->user_name, 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <h5 class="tw-font-semibold">{{ $review->user_name }}</h5>
-                                        <div class="tw-text-sm tw-text-gray-500">
-                                            {{ $review->created_at->format('d.m.Y H:i') }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tw-flex tw-items-center tw-mb-2">
-                                    <div class="tw-star-rating" data-rating="{{ $review->rating }}"></div>
-                                </div>
-                                <p class="tw-text-gray-700">{{ $review->content }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @empty
-                <div class="tw-text-center tw-py-6 tw-text-gray-500">
-                    <i class="fas fa-comment-slash tw-text-3xl tw-mb-3"></i>
-                    <p>Нет отзывов с Яндекс Карт</p>
-                </div>
-                @endforelse
+        <div class="tab-content" id="reviewsTabContent">
+            <div class="tab-pane fade show active" id="yandex-reviews" role="tabpanel">
+                @livewire('yandex-reviews', ['establishment' => $establishment], key('yandex-'.$establishment->id))
             </div>
-
-            <!-- Пользовательские отзывы -->
-            <div class="tw-tab-pane fade" id="user-reviews">
-                @forelse($establishment->userReviews as $review)
-                <div class="tw-card tw-mb-3">
-                    <div class="tw-card-body">
-                        <div class="tw-flex tw-items-start">
-                            <div class="tw-flex-1">
-                                <div class="tw-flex tw-items-center tw-mb-2">
-                                    <div class="tw-w-8 tw-h-8 tw-bg-purple-500 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-text-white tw-mr-3">
-                                        {{ strtoupper(substr($review->user->name, 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <h5 class="tw-font-semibold">{{ $review->user->name }}</h5>
-                                        <div class="tw-text-sm tw-text-gray-500">
-                                            {{ $review->created_at->format('d.m.Y H:i') }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tw-flex tw-items-center tw-mb-2">
-                                    <div class="tw-star-rating" data-rating="{{ $review->rating }}"></div>
-                                </div>
-                                <p class="tw-text-gray-700">{{ $review->content }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @empty
-                <div class="tw-text-center tw-py-6 tw-text-gray-500">
-                    <i class="fas fa-comment-slash tw-text-3xl tw-mb-3"></i>
-                    <p>Пока нет пользовательских отзывов</p>
-                </div>
-                @endforelse
+            
+            <div class="tab-pane fade" id="user-reviews" role="tabpanel">
+                @livewire('user-reviews', ['establishment' => $establishment], key('user-'.$establishment->id))
             </div>
         </div>
     </div>
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- Добавляем недостающие стили Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
-    .tw-badge {
-        @apply tw-inline-flex tw-items-center tw-text-sm tw-font-medium;
-    }
-    
-    .tw-star-rating {
-        @apply tw-inline-flex tw-space-x-1;
-    }
-    
-    .tw-star-rating i {
-        @apply tw-text-yellow-400;
-    }
-    
-    .tw-nav-tabs .tw-nav-link {
-        @apply tw-border-0 tw-px-4 tw-py-2 hover:tw-text-blue-600;
-    }
-    
-    .tw-nav-tabs .tw-nav-link.active {
-        @apply tw-border-b-2 tw-border-blue-500 tw-text-blue-600;
-    }
-</style>
+.nav-tabs {
+    @apply tw-border-b tw-border-gray-200;
+}
+
+.nav-tabs .nav-link {
+    @apply tw-border-0 tw-px-4 tw-py-2 tw-text-gray-500 hover:tw-text-blue-600;
+}
+
+.nav-tabs .nav-link.active {
+    @apply tw-border-b-2 tw-border-blue-500 tw-text-blue-600 tw-bg-transparent;
+}
+
+.tab-content > .tab-pane {
+    @apply tw-p-3;
+}
+</style>  
+<!-- Подключаем Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Инициализация звезд рейтинга
-    document.querySelectorAll('.tw-star-rating').forEach(el => {
-        const rating = parseFloat(el.dataset.rating);
-        let stars = '';
-        for(let i = 1; i <= rating; i++) {
-            stars += `⭐`;
-        }
-        el.innerHTML = stars;
-    });
-});
+//TAB
+document.addEventListener('livewire:load', function() {
+    const triggerTabList = [].slice.call(document.querySelectorAll('#reviewsTab button'))
+    
+    triggerTabList.forEach(function (triggerEl) {
+        triggerEl.addEventListener('shown.bs.tab', function (event) {
+            const target = event.target.getAttribute('data-bs-target')
+            Livewire.emit('tabChanged', target)
+        })
+    })
+})
 
 initMap();
 
