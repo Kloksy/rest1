@@ -47,6 +47,11 @@ class User extends Authenticatable
         'role_id' => 'nullable'
     ];
 
+    public function getAuthPasswordName()
+    {
+        return 'password'; // Имя поля с паролем
+    }
+
     public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\Role::class, 'role_id');
@@ -54,17 +59,17 @@ class User extends Authenticatable
 
     public function cuisines(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Cuisine::class, 'user_preferred_cuisines');
+        return $this->belongsToMany(\App\Models\Cuisine::class, 'user_preferred_cuisines', 'user_id', 'cuisine_id');
     }
 
     public function establishmentTypes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\EstablishmentType::class, 'user_preferred_types');
+        return $this->belongsToMany(\App\Models\EstablishmentType::class, 'user_preferred_types', 'user_id', 'type_id');
     }
 
-    public function userPreferences(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function userPreferences(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasMany(\App\Models\UserPreference::class, 'user_id');
+        return $this->hasOne(\App\Models\UserPreference::class, 'user_id');
     }
 
     public function userInteractions(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -79,6 +84,6 @@ class User extends Authenticatable
 
     public function generalInfos(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\GeneralInfo::class, 'user_preferred_general_info');
+        return $this->belongsToMany(\App\Models\GeneralInfo::class, 'user_preferred_general_info', 'user_id', 'general_info_id');
     }
 }

@@ -77,13 +77,6 @@
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('establishmentTypes.index') }}" class="nav-link {{ Request::is('establishmentTypes*') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-home"></i>
-        <p>Establishment Types</p>
-    </a>
-</li>
-
-<li class="nav-item">
     <a href="{{ route('userPreferences.index') }}" class="nav-link {{ Request::is('userPreferences*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-home"></i>
         <p>User Preferences</p>

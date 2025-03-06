@@ -29,29 +29,29 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Получить все типы заведений для формы
-        $establishmentTypes = EstablishmentType::all();
+        // // Получить все типы заведений для формы
+        // $establishmentTypes = EstablishmentType::all();
 
-        // Получить все типы кухонь для формы
-        $cuisines = Cuisine::all();
+        // // Получить все типы кухонь для формы
+        // $cuisines = Cuisine::all();
 
-        // Получить топ-5 популярных заведений
-        $popularEstablishments = Establishment::orderByDesc('rating')->take(5)->get();
+        // // Получить топ-5 популярных заведений
+        // $popularEstablishments = Establishment::orderByDesc('rating')->take(5)->get();
 
-        // Получить рекомендации для пользователя
-        if (auth()->check()) {
-            $userId = auth()->user()->id;
-            $recommendations = $this->calculateHybridRecommendations($userId);
-        } else {
-            // Для неавторизованных пользователей показываем заведения поблизости
-            $recommendations = Establishment::inRandomOrder()->take(5)->get();
-        }
+        // // Получить рекомендации для пользователя
+        // if (auth()->check()) {
+        //     $userId = auth()->user()->id;
+        //     $recommendations = $this->calculateHybridRecommendations($userId);
+        // } else {
+        //     // Для неавторизованных пользователей показываем заведения поблизости
+        //     $recommendations = Establishment::inRandomOrder()->take(5)->get();
+        // }
 
         return view('home', [
-            'establishmentTypes' => $establishmentTypes,
-            'cuisines' => $cuisines,
-            'popularEstablishments' => $popularEstablishments,
-            'recommendations' => $recommendations,
+            // 'establishmentTypes' => $establishmentTypes,
+            // 'cuisines' => $cuisines,
+            // 'popularEstablishments' => $popularEstablishments,
+            // 'recommendations' => $recommendations,
         ]);
     }
 
