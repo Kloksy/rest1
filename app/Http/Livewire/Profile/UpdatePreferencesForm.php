@@ -39,7 +39,6 @@ class UpdatePreferencesForm extends Component
     public function save()
     {
         $user = auth()->user();
-        dump($this->selectedCuisines);
         // Сохраняем связи Many-to-Many
         $user->cuisines()->sync($this->selectedCuisines);
         $user->establishmentTypes()->sync($this->selectedTypes);
@@ -60,13 +59,7 @@ class UpdatePreferencesForm extends Component
     
     public function handleSelect2Update($payload)
     {
-        if ($payload['model'] === 'selectedCuisines') {
-            $this->selectedCuisines = $payload['value'];
-        } elseif ($payload['model'] === 'selectedTypes') {
-            $this->selectedTypes = $payload['value'];
-        } elseif ($payload['model'] === 'selectedGeneralInfos') {
-            $this->selectedGeneralInfos = $payload['value'];
-        }
+        $this->{$payload['model']} = $payload['value'];
     }
 
     public function render()

@@ -37,6 +37,7 @@ class EstablishmentRepository extends BaseRepository
             'cuisines',
             'generalInfos',
             'type',
+            'contacts',
             'yandexReviews' => function ($query) {
                 $query->orderByDesc('created_at');
             },

@@ -12,7 +12,7 @@ export default defineConfig({
                 'node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css',
                 'node_modules/admin-lte/dist/js/adminlte.min.js',
             ],
-            refresh: true,
+            refresh: false,
         }),
     ],
     resolve: {

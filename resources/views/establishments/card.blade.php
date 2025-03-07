@@ -126,17 +126,33 @@
     @endif
 
     <!-- График работы -->
-    <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-mb-8">
-        <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">
-            <i class="fas fa-clock tw-text-green-500 tw-mr-2"></i>График работы
-        </h2>
-        <div class="tw-divide-y tw-divide-gray-200">
-            @foreach($establishment->workingHours as $workingHour)
-            <div class="tw-flex tw-items-center tw-justify-between tw-py-3">
-                <span class="tw-text-gray-600">{{ $daysOfWeek[$workingHour->day] ?? $workingHour->day }}</span>
-                <span class="tw-font-medium">{{ $workingHour->hours }}</span>
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mb-8">
+        <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-mb-8">
+            <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">
+                <i class="fas fa-clock tw-text-green-500 tw-mr-2"></i>График работы
+            </h2>
+            <div class="tw-divide-y tw-divide-gray-200">
+                @foreach($establishment->workingHours as $workingHour)
+                <div class="tw-flex tw-items-center tw-justify-between tw-py-3">
+                    <span class="tw-text-gray-600">{{ $daysOfWeek[$workingHour->day] ?? $workingHour->day }}</span>
+                    <span class="tw-font-medium">{{ $workingHour->hours }}</span>
+                </div>
+                @endforeach
             </div>
-            @endforeach
+        </div>
+        <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-mb-8">
+            <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">
+                <i class="fas fa-link tw-text-blue-500 tw-mr-2"></i>Контакты
+            </h2>
+            <div class="tw-divide-y tw-divide-gray-200">
+                @foreach($establishment->contacts as $contact)
+                <div class="tw-flex tw-items-center tw-justify-between tw-py-3">
+                    <a href="{{ $contact->value }}" class="tw-text-blue-500 hover:tw-text-blue-700">
+                        <span class="tw-w-1/3 tw-font-medium tw-text-gray-500">{{ $contact->type }}</span>
+                    </a>
+                </div>
+                @endforeach
+            </div>
         </div>
     </div>
 

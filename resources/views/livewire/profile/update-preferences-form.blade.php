@@ -65,10 +65,10 @@
                 <div>
                     <label class="tw-block tw-text-sm tw-font-medium">Ценовая категория</label>
                     <select wire:model="priceCategory" class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border-gray-300">
-                        <option value="низкие" @selected($priceCategory == 'низкие')>💰 Низкая</option>
-                        <option value="средние" @selected($priceCategory == 'средние')>💰💰 Средняя</option>
-                        <option value="выше среднего" @selected($priceCategory == 'выше среднего')>💰💰💰 Выше средней</option>
-                        <option value="высокие" @selected($priceCategory == 'высокие')>💰💰💰💰 Высокая</option>
+                        <option value="низкие" @selected($priceCategory == 'низкие')>Низкая</option>
+                        <option value="средние" @selected($priceCategory == 'средние')>Средняя</option>
+                        <option value="выше среднего" @selected($priceCategory == 'выше среднего')>Выше средней</option>
+                        <option value="высокие" @selected($priceCategory == 'высокие')>Высокая</option>
                     </select>
                 </div>
 

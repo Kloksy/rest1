@@ -21,39 +21,43 @@
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             <!-- Main Header -->
-            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <nav class="main-header navbar navbar-expand navbar-white navbar-light tw-border-b tw-border-gray-200">
                 <!-- Left navbar links -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                                class="fas fa-bars"></i></a>
+                        <a class="nav-link tw-text-gray-600" data-widget="pushmenu" href="#" role="button">
+                            <i class="fas fa-bars tw-text-lg"></i>
+                        </a>
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto tw-flex tw-items-center">
                     @auth
+                        <!-- Авторизованный пользователь -->
                         <li class="nav-item dropdown user-menu">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                                <img src="https://assets.infyom.com/logo/blue_logo_150x150.png"
-                                    class="user-image img-circle elevation-2" alt="User Image">
-                                <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
+                            <a href="#" class="nav-link dropdown-toggle tw-flex tw-items-center" data-toggle="dropdown">
+                                <img src=""
+                                    class="user-image img-circle tw-w-8 tw-h-8 tw-object-cover">
+                                <span class="tw-ml-2 tw-text-gray-700">{{ Auth::user()->name }}</span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                                <!-- User image -->
-                                <li class="user-header bg-primary">
-                                    <img src="https://assets.infyom.com/logo/blue_logo_150x150.png"
-                                        class="img-circle elevation-2" alt="User Image">
-                                    <p>
+                            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right tw-rounded-lg tw-shadow-xl">
+                                <li class="user-header tw-bg-gradient-to-r tw-from-blue-500 tw-to-blue-600">
+                                    <img src=""
+                                        class="img-circle tw-w-20 tw-h-20">
+                                    <p class="tw-text-white tw-mt-2">
                                         {{ Auth::user()->name }}
-                                        <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>
+                                        <small class="tw-block tw-mt-1">Joined {{ Auth::user()->created_at->format('M Y') }}</small>
                                     </p>
                                 </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Profile</a>
-                                    <a href="#" class="btn btn-default btn-flat float-right"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Sign out
+                                <li class="user-footer tw-p-4">
+                                    <a href="{{ route('profile') }}" 
+                                    class="btn btn-default tw-bg-gray-100 hover:tw-bg-gray-200 tw-rounded-lg">
+                                        <i class="fas fa-user-circle tw-mr-2"></i>Profile
+                                    </a>
+                                    <a href="#" 
+                                    class="btn btn-default tw-bg-red-100 hover:tw-bg-red-200 tw-rounded-lg tw-float-right"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt tw-mr-2"></i>Logout
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
@@ -61,6 +65,22 @@
                                 </li>
                             </ul>
                         </li>
+                    @else
+                        <!-- Гости -->
+                        <li class="nav-item">
+                            <a href="{{ route('login') }}" 
+                            class="nav-link tw-text-gray-600 hover:tw-text-blue-600 tw-transition-colors">
+                                <i class="fas fa-sign-in-alt tw-mr-1"></i>Login
+                            </a>
+                        </li>
+                        @if(Route::has('register'))
+                        <li class="nav-item">
+                            <a href="{{ route('register') }}" 
+                            class="nav-link tw-text-gray-600 hover:tw-text-blue-600 tw-transition-colors tw-ml-4">
+                                <i class="fas fa-user-plus tw-mr-1"></i>Register
+                            </a>
+                        </li>
+                        @endif
                     @endauth
                 </ul>
             </nav>
@@ -69,7 +89,7 @@
             @include('layouts.sidebar')
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
+            <div class="content-wrapper tw-bg-gray-50">
                 @yield('content')
             </div>
 
